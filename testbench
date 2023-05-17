@@ -1,0 +1,21 @@
+module counter_tb;
+reg clk; // Input
+reg rst; // Input
+wire [3:0] cnt; // Output
+ 
+counter r1 (.cnt(cnt), .clk(clk), .rst(rst));
+
+initial
+begin
+clk = 1'b0; 
+rst = 1'b0;
+#5 
+rst = 1'b1;
+#5 
+rst = 1'b0;
+#400 
+$finish;
+end
+
+always #5 clk = ~clk; 
+endmodule
