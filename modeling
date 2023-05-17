@@ -1,0 +1,37 @@
+module counter(cnt, clk, rst);
+output [3:0] cnt;
+input clk, rst;
+T_FF tff0(cnt[0], clk, rst);
+T_FF tff1(cnt[1], cnt[0], rst);
+T_FF tff2(cnt[2], cnt[1], rst);
+T_FF tff3(cnt[3], cnt[2], rst);
+endmodule
+
+module T_FF(cnt, clk, rst);
+output [3:0]cnt;
+input clk, rst;
+wire [3:0]d;
+
+D_FF dff1(cnt[0], d[0], clk, rst);
+not n1(d[0], cnt[0]); 
+
+D_FF dff2(cnt[1], d[1], clk, rst);
+xor xor1(d[1], cnt[0], cnt[1]);
+
+D_FF dff3(cnt[2], d[2], clk, rst);
+xor xor2(d[2], (cnt[0] & cnt[1]), cnt[2]);
+
+D_FF dff4(cnt[3], d[3], clk, rst);
+xor xor3(d[3], (cnt[0] & cnt[1] & cnt[2]), cnt[3]);
+endmodule
+
+module D_FF(cnt, d, clk, rst);
+output cnt;
+input d, clk, rst;
+reg cnt;
+always @(posedge rst or negedge clk)
+if (rst)
+cnt = 1'b0;
+else
+cnt = d;
+endmodule
